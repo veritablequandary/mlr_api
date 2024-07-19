@@ -8,4 +8,5 @@ db_user = os.environ["DB_USER"]
 db_name = os.environ["DB_DB"]
 db_port = os.environ["DB_PORT"]
 
-db = connect(f"mysql://${db_user}:${db_pass}@${db_host}:${db_port}/${db_name}")
+db = MySQLDatabase(None)
+db.init(database=db_name, host=db_host, user=db_user, port=db_port, password=db_pass)
