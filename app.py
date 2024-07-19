@@ -1,6 +1,22 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
+tag_definitions = [
+    {
+        "name": "data",
+        "description": "Information related to rules, game mechanics, etc.",
+    },
+    {
+        "name": "games",
+        "description": "Information about current and past games and plate appearances.",
+    },
+    {"name": "players", "description": "Information about players."},
+    {
+        "name": "teams",
+        "description": "Information about teams and their ballparks.",
+    },
+]
+
 app = FastAPI(
     title="MLR-Reference API",
     summary="The MLR-Reference API allows users to access league data (players, games, teams, etc.) from the MLR database.",
@@ -8,4 +24,5 @@ app = FastAPI(
     version="0.0.1",
     docs_url="/",
     redoc_url=None,
+    openapi_tags=tag_definitions,
 )
