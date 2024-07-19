@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter, HTTPException
-from models import BattingType
+from models import BattingType, BattingTypePydantic
 
 tag_definitions = [
     {
@@ -37,8 +37,13 @@ dataRouter = APIRouter(
 )
 
 
-@dataRouter.get("/battingTypes/all", tags=["data"])
-def get_all_batting_types():
+@dataRouter.get(
+    "/battingTypes/all",
+    tags=["data"],
+    description="Data on all current batting types.",
+    response_description="A list of data on all current batting types, sorted by type ID.",
+)
+def get_all_batting_types() -> list[BattingTypePydantic]:
     battingTypes = BattingType.select().order_by(BattingType.type).dicts()
 
     if len(battingTypes) == 0:

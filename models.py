@@ -1,13 +1,14 @@
 from peewee import Model, CharField, IntegerField, TextField
+from pydantic import BaseModel
 from database import db
 
 
-class BaseModel(Model):
+class Base(Model):
     class Meta:
         database = db
 
 
-class BattingType(BaseModel):
+class BattingType(Base):
     class Meta:
         table_name = "battingTypes"
 
@@ -23,3 +24,18 @@ class BattingType(BaseModel):
     rangePO = IntegerField()
     rangeRGO = IntegerField()
     rangeLGO = IntegerField()
+
+
+class BattingTypePydantic(BaseModel):
+    type: str
+    name: str
+    rangeHR: int
+    range3B: int
+    range2B: int
+    range1B: int
+    rangeBB: int
+    rangeFO: int
+    rangeK: int
+    rangePO: int
+    rangeRGO: int
+    rangeLGO: int
