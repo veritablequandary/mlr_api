@@ -39,12 +39,12 @@ dataRouter = APIRouter(
 
 @dataRouter.get("/battingTypes/all", tags=["data"])
 def get_all_batting_types():
-    battingTypes = BattingType.select()
+    battingTypes = BattingType.select().order_by(BattingType.type)
 
     if len(battingTypes) == 0:
         raise HTTPException(status_code=404, detail="No batting types found.")
 
-    return [battingType for battingType in battingTypes]
+    return [*battingTypes]
 
 
 app.include_router(dataRouter)
