@@ -11,7 +11,7 @@ class BattingType(BaseModel):
     class Meta:
         table_name = "battingTypes"
 
-    type = CharField(rimary_key=True)
+    type = CharField(primary_key=True)
     name = CharField()
     rangeHR = IntegerField()
     range3B = IntegerField()
