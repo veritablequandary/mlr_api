@@ -37,7 +37,7 @@ dataRouter = APIRouter(
 )
 
 
-@dataRouter.get("/battingTypes/all", status_code=200, tags=["data"])
+@dataRouter.get("/battingTypes/all", tags=["data"])
 def get_all_batting_types():
     battingTypes = BattingType.select()
     if len(battingTypes) == 0:

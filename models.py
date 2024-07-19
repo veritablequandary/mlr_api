@@ -1,4 +1,4 @@
-from peewee import Model, CharField, IntegerField
+from peewee import Model, CharField, IntegerField, TextField
 from database import db
 
 
@@ -12,7 +12,7 @@ class BattingType(BaseModel):
         table_name = "battingTypes"
 
     type = CharField(primary_key=True)
-    name = CharField()
+    name = TextField()
     rangeHR = IntegerField()
     range3B = IntegerField()
     range2B = IntegerField()
