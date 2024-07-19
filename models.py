@@ -26,7 +26,25 @@ class BattingType(Base):
     rangeLGO = IntegerField()
 
 
-class BattingTypePydantic(BaseModel):
+class PitchingType(Base):
+    class Meta:
+        table_name = "pitchingTypes"
+
+    type = CharField(primary_key=True)
+    name = TextField()
+    rangeHR = IntegerField()
+    range3B = IntegerField()
+    range2B = IntegerField()
+    range1B = IntegerField()
+    rangeBB = IntegerField()
+    rangeFO = IntegerField()
+    rangeK = IntegerField()
+    rangePO = IntegerField()
+    rangeRGO = IntegerField()
+    rangeLGO = IntegerField()
+
+
+class BattingPitchingTypeDefinition(BaseModel):
     type: str
     name: str
     rangeHR: int

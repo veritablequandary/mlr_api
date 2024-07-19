@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter, HTTPException
-from models import BattingType, BattingTypePydantic
+from models import BattingType, PitchingType, BattingPitchingTypeDefinition
 
 tag_definitions = [
     {
@@ -43,13 +43,26 @@ dataRouter = APIRouter(
     description="Data on all current batting types.",
     response_description="A list of data on all current batting types, sorted by type ID.",
 )
-def get_all_batting_types() -> list[BattingTypePydantic]:
+def get_all_batting_types() -> list[BattingPitchingTypeDefinition]:
     battingTypes = BattingType.select().order_by(BattingType.type).dicts()
-
     if len(battingTypes) == 0:
         raise HTTPException(status_code=404, detail="No batting types found.")
-
     return [*battingTypes]
+
+
+@dataRouter.get(
+    "/battingTypes/{id}",
+    tags=["data"],
+    description="Data on a specific batting type.",
+    response_description="Data on the specific batting type",
+)
+def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
+    battingType = BattingType.get_or_none(BattingType.type == id.upper())
+    if (battingType) == None:
+        raise HTTPException(
+            status_code=404, detail="Batting type with the requested ID was not found."
+        )
+    return battingType.dicts()
 
 
 app.include_router(dataRouter)
