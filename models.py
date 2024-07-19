@@ -1,4 +1,4 @@
-from peewee import Model, FixedCharField, CharField, IntegerField
+from peewee import Model, CharField, IntegerField
 from database import db
 
 
@@ -11,7 +11,7 @@ class BattingType(BaseModel):
     class Meta:
         table_name = "battingTypes"
 
-    type = FixedCharField(2, primary_key=True)
+    type = CharField(rimary_key=True)
     name = CharField()
     rangeHR = IntegerField()
     range3B = IntegerField()
