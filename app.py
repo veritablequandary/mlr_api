@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI, APIRouter, HTTPException
+from models import BattingType
 
 tag_definitions = [
     {
@@ -22,7 +22,23 @@ app = FastAPI(
     summary="The MLR-Reference API allows users to access league data (players, games, teams, etc.) from the MLR database.",
     description="For issues, please contact Sterling Turlington on the MLR Main Discord (@veritablequandary).",
     version="0.0.1",
-    docs_url="/",
-    redoc_url=None,
+    docs_url=None,
+    redoc_url="/",
     openapi_tags=tag_definitions,
 )
+
+dataRouter = APIRouter(
+    prefix="/data",
+    tags=["data"],
+    responses={
+        404: {"description": "The requested resource was not found."},
+        500: {"description": "Internal server error."},
+    },
+)
+
+
+@dataRouter.get("/battingTypes/all", status_code=200)
+async def get_all_batting_types():
+    battingTypes = BattingType.get().order_by(BattingType.type)
+    if len(battingTypes) == 0:
+        raise HTTPException(status_code=404, detail="No batting types found.")
