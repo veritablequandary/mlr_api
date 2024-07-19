@@ -44,7 +44,7 @@ def get_all_batting_types():
     if len(battingTypes) == 0:
         raise HTTPException(status_code=404, detail="No batting types found.")
 
-    return battingTypes
+    return [*battingTypes]
 
 
 app.include_router(dataRouter)
