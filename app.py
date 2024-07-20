@@ -58,7 +58,7 @@ def get_all_batting_types() -> list[BattingPitchingTypeDefinition]:
 )
 def search_batting_types(ids: str | None = None) -> list[BattingPitchingTypeDefinition]:
     if (ids) != None:
-        separated = list(map(str.upper(), ids.split(",")))
+        separated = list(map(str.upper, ids.split(",")))
         battingTypes = (
             BattingType.select()
             .where(BattingType.type.in_(separated))
