@@ -70,9 +70,11 @@ def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
     response_description="A list of data for all matching batting types; if no search terms provided, all batting types will be returned.",
 )
 def search_batting_types(ids: str | None = None) -> list[BattingPitchingTypeDefinition]:
-    if ids:
+    if (ids) != None:
         separated = list(map(str.upper(), ids.split(",")))
-        battingTypes = BattingType.select().where(BattingType.type.in_(separated))
+        battingTypes = (
+            BattingType.select().where(BattingType.type.in_(separated))order_by(BattingType.type).dicts()
+        )
         if len(battingTypes) == 0:
             raise HTTPException(status_code=404, detail="No batting types found.")
         return [*battingTypes]
