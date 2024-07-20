@@ -63,4 +63,24 @@ def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
     return battingType
 
 
+@dataRouter.get(
+    "/battingTypes/search",
+    tags=["data"],
+    description="Search for one or more batting types using a comma-separated list of IDs.",
+    response_description="A list of data for all matching batting types; if no search terms provided, all batting types will be returned.",
+)
+def search_batting_types(ids: str | None = None) -> list[BattingPitchingTypeDefinition]:
+    if ids:
+        separated = list(map(str.upper(), ids.split(",")))
+        battingTypes = BattingType.select().where(BattingType.type.in_(separated))
+        if len(battingTypes) == 0:
+            raise HTTPException(status_code=404, detail="No batting types found.")
+        return [*battingTypes]
+    else:
+        battingTypes = BattingType.select().order_by(BattingType.type).dicts()
+        if len(battingTypes) == 0:
+            raise HTTPException(status_code=404, detail="No batting types found.")
+        return [*battingTypes]
+
+
 app.include_router(dataRouter)
