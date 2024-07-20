@@ -59,10 +59,8 @@ def get_all_batting_types() -> list[BattingPitchingTypeDefinition]:
 def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
     battingType = BattingType.get_or_none(BattingType.type == id.upper())
     if (battingType) == None:
-        raise HTTPException(
-            status_code=404, detail="Batting type with the requested ID was not found."
-        )
-    return battingType.dicts()
+        raise HTTPException(status_code=404, detail="Batting type not found.")
+    return battingType
 
 
 app.include_router(dataRouter)
