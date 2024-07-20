@@ -51,19 +51,6 @@ def get_all_batting_types() -> list[BattingPitchingTypeDefinition]:
 
 
 @dataRouter.get(
-    "/battingTypes/{id}",
-    tags=["data"],
-    description="Data on a specific batting type.",
-    response_description="Data on the specific batting type",
-)
-def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
-    battingType = BattingType.get_or_none(BattingType.type == id.upper())
-    if (battingType) == None:
-        raise HTTPException(status_code=404, detail="Batting type not found.")
-    return battingType
-
-
-@dataRouter.get(
     "/battingTypes/search",
     tags=["data"],
     description="Search for one or more batting types using a comma-separated list of IDs.",
@@ -71,7 +58,7 @@ def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
 )
 def search_batting_types(ids: str | None = None) -> list[BattingPitchingTypeDefinition]:
     if (ids) != None:
-        separated = list(map(str.upper(), ids.split("|")))
+        separated = list(map(str.upper(), ids.split(",")))
         battingTypes = (
             BattingType.select()
             .where(BattingType.type.in_(separated))
@@ -86,6 +73,19 @@ def search_batting_types(ids: str | None = None) -> list[BattingPitchingTypeDefi
         if len(battingTypes) == 0:
             raise HTTPException(status_code=404, detail="No batting types found.")
         return [*battingTypes]
+
+
+@dataRouter.get(
+    "/battingTypes/{id}",
+    tags=["data"],
+    description="Data on a specific batting type.",
+    response_description="Data on the specific batting type",
+)
+def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
+    battingType = BattingType.get_or_none(BattingType.type == id.upper())
+    if (battingType) == None:
+        raise HTTPException(status_code=404, detail="Batting type not found.")
+    return battingType
 
 
 app.include_router(dataRouter)
