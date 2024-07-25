@@ -88,4 +88,57 @@ def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
     return battingType
 
 
+@dataRouter.get(
+    "/pitchingTypes/all",
+    tags=["data"],
+    description="Data on all current pitching types.",
+    response_description="A list of data on all current pitching types, sorted by type ID.",
+)
+def get_all_pitching_types() -> list[BattingPitchingTypeDefinition]:
+    pitchingTypes = PitchingType.select().order_by(PitchingType.type).dicts()
+    if len(pitchingTypes) == 0:
+        raise HTTPException(status_code=404, detail="No pitching types found.")
+    return [*pitchingTypes]
+
+
+@dataRouter.get(
+    "/pitchingTypes/search",
+    tags=["data"],
+    description="Search for one or more pitching types using a comma-separated list of IDs.",
+    response_description="A list of data for all matching pitching types; if no search terms provided, all batting types will be returned.",
+)
+def search_pitching_types(
+    ids: str | None = None,
+) -> list[BattingPitchingTypeDefinition]:
+    if (ids) != None:
+        separated = list(map(str.upper, ids.split(",")))
+        pitchingTypes = (
+            PitchingType.select()
+            .where(PitchingType.type.in_(separated))
+            .order_by(PitchingType.type)
+            .dicts()
+        )
+        if len(pitchingTypes) == 0:
+            raise HTTPException(status_code=404, detail="No pitching types found.")
+        return [*pitchingTypes]
+    else:
+        pitchingTypes = PitchingType.select().order_by(PitchingType.type).dicts()
+        if len(pitchingTypes) == 0:
+            raise HTTPException(status_code=404, detail="No pitching types found.")
+        return [*pitchingTypes]
+
+
+@dataRouter.get(
+    "/pitchingTypes/{id}",
+    tags=["data"],
+    description="Data on a specific pitching type.",
+    response_description="Data on the specific piching type",
+)
+def get_pitching_type(id: str) -> BattingPitchingTypeDefinition:
+    pitchingType = PitchingType.get_or_none(PitchingType.type == id.upper())
+    if (pitchingType) == None:
+        raise HTTPException(status_code=404, detail="Pitching type not found.")
+    return pitchingType
+
+
 app.include_router(dataRouter)
