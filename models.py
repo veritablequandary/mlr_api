@@ -44,6 +44,24 @@ class PitchingType(Base):
     rangeLGO = IntegerField()
 
 
+class HandBonus(Base):
+    class Meta:
+        table_name = "handBonuses"
+
+    type = CharField(primary_key=True)
+    name = TextField()
+    rangeHR = IntegerField()
+    range3B = IntegerField()
+    range2B = IntegerField()
+    range1B = IntegerField()
+    rangeBB = IntegerField()
+    rangeFO = IntegerField()
+    rangeK = IntegerField()
+    rangePO = IntegerField()
+    rangeRGO = IntegerField()
+    rangeLGO = IntegerField()
+
+
 class BattingPitchingTypeDefinition(BaseModel):
     type: str
     name: str

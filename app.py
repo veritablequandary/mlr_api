@@ -1,5 +1,9 @@
 from fastapi import FastAPI, APIRouter, HTTPException
-from models import BattingType, PitchingType, BattingPitchingTypeDefinition
+from models import BattingType, PitchingType, HandBonus, BattingPitchingTypeDefinition
+
+####################
+# Tag definitions (docs)
+####################
 
 tag_definitions = [
     {
@@ -17,6 +21,10 @@ tag_definitions = [
     },
 ]
 
+####################
+# API instance
+####################
+
 app = FastAPI(
     title="MLR-Reference API",
     summary="The MLR-Reference API allows users to access league data (players, games, teams, etc.) from the MLR database.",
@@ -27,6 +35,10 @@ app = FastAPI(
     openapi_tags=tag_definitions,
 )
 
+####################
+# Routers
+####################
+
 dataRouter = APIRouter(
     prefix="/data",
     tags=["data"],
@@ -35,6 +47,10 @@ dataRouter = APIRouter(
         500: {"description": "Internal server error."},
     },
 )
+
+####################
+# /data/battingTypes
+####################
 
 
 @dataRouter.get(
@@ -88,6 +104,11 @@ def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
     return battingType
 
 
+####################
+# /data/pitchingTypes
+####################
+
+
 @dataRouter.get(
     "/pitchingTypes/all",
     tags=["data"],
@@ -132,13 +153,75 @@ def search_pitching_types(
     "/pitchingTypes/{id}",
     tags=["data"],
     description="Data on a specific pitching type.",
-    response_description="Data on the specific piching type",
+    response_description="Data on the specific pitching type",
 )
 def get_pitching_type(id: str) -> BattingPitchingTypeDefinition:
     pitchingType = PitchingType.get_or_none(PitchingType.type == id.upper())
     if (pitchingType) == None:
         raise HTTPException(status_code=404, detail="Pitching type not found.")
     return pitchingType
+
+
+####################
+# /data/handBonuses
+####################
+
+
+@dataRouter.get(
+    "/handBonuses/all",
+    tags=["data"],
+    description="Data on all current pitching hand bonuses.",
+    response_description="A list of data on all current pitching hand bonuses, sorted by type ID.",
+)
+def get_all_hand_bonuses() -> list[BattingPitchingTypeDefinition]:
+    handBonuses = HandBonus.select().order_by(HandBonus.type).dicts()
+    if len(handBonuses) == 0:
+        raise HTTPException(status_code=404, detail="No pitching hand bonuses found.")
+    return [*handBonuses]
+
+
+@dataRouter.get(
+    "/handBonuses/search",
+    tags=["data"],
+    description="Search for one or more pitching hand bonuses using a comma-separated list of IDs.",
+    response_description="A list of data for all matching pitching hand bonuses; if no search terms provided, all hand bonuses will be returned.",
+)
+def search_hand_bonuses(
+    ids: str | None = None,
+) -> list[BattingPitchingTypeDefinition]:
+    if (ids) != None:
+        separated = list(map(str.upper, ids.split(",")))
+        handBonuses = (
+            HandBonus.select()
+            .where(HandBonus.type.in_(separated))
+            .order_by(HandBonus.type)
+            .dicts()
+        )
+        if len(handBonuses) == 0:
+            raise HTTPException(
+                status_code=404, detail="No pitching hand bonuses found."
+            )
+        return [*handBonuses]
+    else:
+        handBonuses = HandBonus.select().order_by(HandBonus.type).dicts()
+        if len(handBonuses) == 0:
+            raise HTTPException(
+                status_code=404, detail="No pitching hand bonuses found."
+            )
+        return [*handBonuses]
+
+
+@dataRouter.get(
+    "/handBonuses/{id}",
+    tags=["data"],
+    description="Data on a specific pitching hand bonus.",
+    response_description="Data on the specific pitching hand bonus",
+)
+def get_hand_bonus(id: str) -> BattingPitchingTypeDefinition:
+    handBonus = HandBonus.get_or_none(HandBonus.type == id.upper())
+    if (handBonus) == None:
+        raise HTTPException(status_code=404, detail="Pitching hand bonus not found.")
+    return handBonus
 
 
 app.include_router(dataRouter)
