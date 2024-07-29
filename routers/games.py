@@ -26,12 +26,7 @@ gamesRouter = APIRouter(
     response_description="A list of data on all in-progress games from the specified league.",
 )
 def get_in_progress(league: str) -> list[GameTypeDefinition]:
-    games = (
-        Game.select()
-        .where((Game.complete != 1) & (str.lower(Game.league) == league.lower()))
-        .order_by(Game.gameID)
-        .dicts()
-    )
+    games = Game.select().where(Game.complete != 1).order_by(Game.gameID).dicts()
 
     if len(games) == 0:
         raise HTTPException(
@@ -60,7 +55,6 @@ def get_scoreboard(league: str) -> list[GameTypeDefinition]:
         .where(
             (Game.season == currentSeason.season)
             & (Game.session == currentSeason.session)
-            & (str.lower(Game.league) == league.lower())
         )
         .order_by(Game.gameID)
         .dicts()
