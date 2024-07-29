@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routers.data import dataRouter
+from routers.games import gamesRouter
 
 ####################
 # Tag definitions (docs)
@@ -48,3 +49,4 @@ app = FastAPI(
 ####################
 
 app.include_router(dataRouter)
+app.include_router(gamesRouter)

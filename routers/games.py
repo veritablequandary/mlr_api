@@ -5,7 +5,7 @@ from models import *
 # /games router
 ####################
 
-dataRouter = APIRouter(
+gamesRouter = APIRouter(
     prefix="/games",
     tags=["games"],
     responses={
@@ -19,7 +19,7 @@ dataRouter = APIRouter(
 ####################
 
 
-@dataRouter.get(
+@gamesRouter.get(
     "/inProgress/{league}",
     tags=["games"],
     description="Data on all in-progress games in the specified league.",
@@ -46,7 +46,7 @@ def get_in_progress(league: str) -> list[GameTypeDefinition]:
 ####################
 
 
-@dataRouter.get(
+@gamesRouter.get(
     "/scoreboard/{league}",
     tags=["games"],
     description="Data on all current-session games in the specified league.",
