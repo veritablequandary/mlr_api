@@ -126,7 +126,7 @@ class GameTypeDefinition(BaseModel):
     gameID: int
     sheetID: str
     threadURL: str
-    umpires: str
+    umpires: str | None = None
     awayTeam: str
     homeTeam: str
     awayScore: int
@@ -135,9 +135,9 @@ class GameTypeDefinition(BaseModel):
     outs: int
     obc: int
     complete: int
-    winningPitcher: int
-    losingPitcher: int
-    save: int
-    potg: int
-    honorMention: int
-    state: str
+    winningPitcher: int | None = None
+    losingPitcher: int | None = None
+    save: int | None = None
+    potg: int | None = None
+    honorMention: int | None = None
+    state: str | None = None
