@@ -1,5 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from models import *
+from models.batting_type import *
+from models.pitching_type import *
+from models.hand_bonus import *
+from models.season import *
 
 ####################
 # /data router
@@ -25,7 +28,7 @@ dataRouter = APIRouter(
     description="Data on all current batting types.",
     response_description="A list of data on all current batting types, sorted by type ID.",
 )
-def get_all_batting_types() -> list[BattingPitchingTypeDefinition]:
+def get_all_batting_types() -> list[BattingTypeDefinition]:
     battingTypes = BattingType.select().order_by(BattingType.type).dicts()
     if len(battingTypes) == 0:
         raise HTTPException(status_code=404, detail="No batting types found.")
@@ -38,7 +41,7 @@ def get_all_batting_types() -> list[BattingPitchingTypeDefinition]:
     description="Search for one or more batting types using a comma-separated list of IDs.",
     response_description="A list of data for all matching batting types; if no search terms provided, all batting types will be returned.",
 )
-def search_batting_types(ids: str | None = None) -> list[BattingPitchingTypeDefinition]:
+def search_batting_types(ids: str | None = None) -> list[BattingTypeDefinition]:
     if (ids) != None:
         separated = list(map(str.upper, ids.split(",")))
         battingTypes = (
@@ -63,7 +66,7 @@ def search_batting_types(ids: str | None = None) -> list[BattingPitchingTypeDefi
     description="Data on a specific batting type.",
     response_description="Data on the specific batting type",
 )
-def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
+def get_batting_type(id: str) -> BattingTypeDefinition:
     battingType = BattingType.get_or_none(BattingType.type == id.upper())
     if (battingType) == None:
         raise HTTPException(status_code=404, detail="Batting type not found.")
@@ -81,7 +84,7 @@ def get_batting_type(id: str) -> BattingPitchingTypeDefinition:
     description="Data on all current pitching types.",
     response_description="A list of data on all current pitching types, sorted by type ID.",
 )
-def get_all_pitching_types() -> list[BattingPitchingTypeDefinition]:
+def get_all_pitching_types() -> list[PitchingTypeDefinition]:
     pitchingTypes = PitchingType.select().order_by(PitchingType.type).dicts()
     if len(pitchingTypes) == 0:
         raise HTTPException(status_code=404, detail="No pitching types found.")
@@ -96,7 +99,7 @@ def get_all_pitching_types() -> list[BattingPitchingTypeDefinition]:
 )
 def search_pitching_types(
     ids: str | None = None,
-) -> list[BattingPitchingTypeDefinition]:
+) -> list[PitchingTypeDefinition]:
     if (ids) != None:
         separated = list(map(str.upper, ids.split(",")))
         pitchingTypes = (
@@ -121,8 +124,8 @@ def search_pitching_types(
     description="Data on a specific pitching type.",
     response_description="Data on the specific pitching type",
 )
-def get_pitching_type(id: str) -> BattingPitchingTypeDefinition:
-    pitchingType = PitchingType.get_or_none(PitchingType.type == id.upper())
+def get_pitching_type(id: str) -> PitchingTypeDefinition:
+    pitchingType = PitchingType.get_or_none(PitchingType.type**id)
     if (pitchingType) == None:
         raise HTTPException(status_code=404, detail="Pitching type not found.")
     return pitchingType
@@ -139,7 +142,7 @@ def get_pitching_type(id: str) -> BattingPitchingTypeDefinition:
     description="Data on all current pitching hand bonuses.",
     response_description="A list of data on all current pitching hand bonuses, sorted by type ID.",
 )
-def get_all_hand_bonuses() -> list[BattingPitchingTypeDefinition]:
+def get_all_hand_bonuses() -> list[HandBonusDefinition]:
     handBonuses = HandBonus.select().order_by(HandBonus.type).dicts()
     if len(handBonuses) == 0:
         raise HTTPException(status_code=404, detail="No pitching hand bonuses found.")
@@ -154,7 +157,7 @@ def get_all_hand_bonuses() -> list[BattingPitchingTypeDefinition]:
 )
 def search_hand_bonuses(
     ids: str | None = None,
-) -> list[BattingPitchingTypeDefinition]:
+) -> list[HandBonusDefinition]:
     if (ids) != None:
         separated = list(map(str.upper, ids.split(",")))
         handBonuses = (
@@ -183,8 +186,8 @@ def search_hand_bonuses(
     description="Data on a specific pitching hand bonus.",
     response_description="Data on the specific pitching hand bonus",
 )
-def get_hand_bonus(id: str) -> BattingPitchingTypeDefinition:
-    handBonus = HandBonus.get_or_none(HandBonus.type == id.upper())
+def get_hand_bonus(id: str) -> HandBonusDefinition:
+    handBonus = HandBonus.get_or_none(HandBonus.type**id)
     if (handBonus) == None:
         raise HTTPException(status_code=404, detail="Pitching hand bonus not found.")
     return handBonus
@@ -201,7 +204,7 @@ def get_hand_bonus(id: str) -> BattingPitchingTypeDefinition:
     description="Returns the current season and session numbers for MLR and MiLR.",
     response_description="Season and session numbers for the MLR and MiLR leagues.",
 )
-def get_current_season() -> list[SeasonTypeDefinition]:
+def get_current_season() -> list[SeasonDefinition]:
     seasons = Season.select().order_by(Season.league).dicts()
     if len(seasons) == 0:
         raise HTTPException(status_code=404, detail="No current season data found.")

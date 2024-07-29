@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from models import *
+from models.game import *
+from models.season import *
 
 ####################
 # /games router
@@ -25,7 +26,7 @@ gamesRouter = APIRouter(
     description="Data on all in-progress games in the specified league.",
     response_description="A list of data on all in-progress games from the specified league.",
 )
-def get_in_progress(league: str) -> list[GameTypeDefinition]:
+def get_in_progress(league: str) -> list[GameDefinition]:
     games = (
         Game.select()
         .where((Game.complete != 1) & (Game.league**league))
@@ -52,7 +53,7 @@ def get_in_progress(league: str) -> list[GameTypeDefinition]:
     description="Data on all current-session games in the specified league.",
     response_description="A list of data on all current-session games from the specified league.",
 )
-def get_scoreboard(league: str) -> list[GameTypeDefinition]:
+def get_scoreboard(league: str) -> list[GameDefinition]:
     currentSeason = Season.get_by_id("mlr")
 
     games = (
@@ -72,8 +73,3 @@ def get_scoreboard(league: str) -> list[GameTypeDefinition]:
             detail="No current-session games found for the specified league.",
         )
     return [*games]
-
-
-####################
-#
-####################
