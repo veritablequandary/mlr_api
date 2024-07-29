@@ -41,6 +41,7 @@ app = FastAPI(
     docs_url="/",
     redoc_url=None,
     openapi_tags=tag_definitions,
+    swagger_ui_parameters={"defaultModelsExpandDepth": -1},
 )
 
 
