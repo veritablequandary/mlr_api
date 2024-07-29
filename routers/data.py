@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from models import BattingType, PitchingType, HandBonus, BattingPitchingTypeDefinition
+from models import *
 
 ####################
 # Routers
@@ -188,3 +188,21 @@ def get_hand_bonus(id: str) -> BattingPitchingTypeDefinition:
     if (handBonus) == None:
         raise HTTPException(status_code=404, detail="Pitching hand bonus not found.")
     return handBonus
+
+
+####################
+# /data/currentSeason
+####################
+
+
+@dataRouter.get(
+    "/currentSeason",
+    tags=["data"],
+    description="Returns the current season and session numbers for MLR and MiLR.",
+    response_description="Season and session numbers for the MLR and MiLR leagues.",
+)
+def get_current_season() -> list[SeasonTypeDefinition]:
+    seasons = Season.select().order_by(Season.league).dicts()
+    if len(seasons) == 0:
+        raise HTTPException(status_code=404, detail="No current season data found.")
+    return [*seasons]

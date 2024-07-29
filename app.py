@@ -7,6 +7,10 @@ from routers.data import dataRouter
 
 tag_definitions = [
     {
+        "name": "calculators",
+        "description": "Calculate ranges and AB results for pitcher/batter matchups.",
+    },
+    {
         "name": "data",
         "description": "Information related to rules, game mechanics, etc.",
     },
@@ -14,7 +18,10 @@ tag_definitions = [
         "name": "games",
         "description": "Information about current and past games and plate appearances.",
     },
-    {"name": "players", "description": "Information about players."},
+    {
+        "name": "players",
+        "description": "Information about players, player performances, and statistics",
+    },
     {
         "name": "teams",
         "description": "Information about teams and their ballparks.",

@@ -75,3 +75,18 @@ class BattingPitchingTypeDefinition(BaseModel):
     rangePO: int
     rangeRGO: int
     rangeLGO: int
+
+
+class Season(Base):
+    class Meta:
+        table_name = "seasonData"
+
+    league = CharField(primary_key=True)
+    season = IntegerField()
+    session = IntegerField()
+
+
+class SeasonTypeDefinition(BaseModel):
+    league: str
+    season: int
+    session: int
