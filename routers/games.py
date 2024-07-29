@@ -66,3 +66,8 @@ def get_scoreboard(league: str) -> list[GameTypeDefinition]:
             detail="No current-session games found for the specified league.",
         )
     return [*games]
+
+
+####################
+#
+####################
