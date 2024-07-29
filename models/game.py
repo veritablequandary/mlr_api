@@ -1,4 +1,4 @@
-from base import Base
+from models.base import Base
 from pydantic import BaseModel
 from peewee import CharField, IntegerField
 
