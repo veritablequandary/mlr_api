@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from typing import Annotated
+from fastapi import APIRouter, HTTPException, Path
 from models.batting_type import *
 from models.pitching_type import *
 from models.hand_bonus import *
@@ -22,10 +23,17 @@ def get_all_batting_types() -> list[BattingTypeDefinition]:
 
 
 @dataRouter.get(
-    "/battingTypes/search",
+    "/battingTypes/{ids}",
     tags=["data"],
 )
-def search_batting_types(ids: str | None = None) -> list[BattingTypeDefinition]:
+def search_batting_types(
+    ids: Annotated[
+        str,
+        Path(
+            title="A single type ID or comma-separated list of type IDs to return, e.g. HK or BC,SF,MH"
+        ),
+    ]
+) -> list[BattingTypeDefinition]:
     if (ids) != None:
         separated = list(map(str.upper, ids.split(",")))
         battingTypes = (
