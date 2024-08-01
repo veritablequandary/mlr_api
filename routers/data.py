@@ -23,10 +23,7 @@ dataRouter = APIRouter(
 
 
 @dataRouter.get(
-    "/battingTypes/all",
-    tags=["data"],
-    description="Data on all current batting types.",
-    response_description="A list of data on all current batting types, sorted by type ID.",
+    "/battingTypes", tags=["data"], summary="", description="", response_description=""
 )
 def get_all_batting_types() -> list[BattingTypeDefinition]:
     battingTypes = BattingType.select().order_by(BattingType.type).dicts()
