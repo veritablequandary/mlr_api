@@ -5,25 +5,23 @@ from models.hand_bonus import *
 from models.season import *
 
 ####################
-# /data router
+# Router
 ####################
 
 dataRouter = APIRouter(
     prefix="/data",
     tags=["data"],
-    responses={
-        404: {"description": "The requested resource was not found."},
-        500: {"description": "Internal server error."},
-    },
 )
 
 ####################
-# /data/battingTypes
+# Batting Types Endpoints
 ####################
 
 
 @dataRouter.get(
-    "/battingTypes", tags=["data"], summary="", description="", response_description=""
+    "/battingTypes",
+    tags=["data"],
+    response_description="A JSON array of all current batting types, sorted by Type ID.",
 )
 def get_all_batting_types() -> list[BattingTypeDefinition]:
     battingTypes = BattingType.select().order_by(BattingType.type).dicts()
