@@ -2,29 +2,15 @@ from fastapi import APIRouter, HTTPException
 from models.game import *
 from models.season import *
 
-####################
-# /games router
-####################
-
 gamesRouter = APIRouter(
     prefix="/games",
     tags=["games"],
-    responses={
-        404: {"description": "The requested resource was not found."},
-        500: {"description": "Internal server error."},
-    },
 )
-
-####################
-# /games/inProgress
-####################
 
 
 @gamesRouter.get(
     "/inProgress/{league}",
     tags=["games"],
-    description="Data on all in-progress games in the specified league.",
-    response_description="A list of data on all in-progress games from the specified league.",
 )
 def get_in_progress(league: str) -> list[GameDefinition]:
     games = (
@@ -42,16 +28,9 @@ def get_in_progress(league: str) -> list[GameDefinition]:
     return [*games]
 
 
-####################
-# /games/scoreboard
-####################
-
-
 @gamesRouter.get(
     "/scoreboard/{league}",
     tags=["games"],
-    description="Data on all current-session games in the specified league.",
-    response_description="A list of data on all current-session games from the specified league.",
 )
 def get_scoreboard(league: str) -> list[GameDefinition]:
     currentSeason = Season.get_by_id("mlr")

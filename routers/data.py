@@ -4,24 +4,15 @@ from models.pitching_type import *
 from models.hand_bonus import *
 from models.season import *
 
-####################
-# Router
-####################
-
 dataRouter = APIRouter(
     prefix="/data",
     tags=["data"],
 )
 
-####################
-# Batting Types Endpoints
-####################
-
 
 @dataRouter.get(
     "/battingTypes",
     tags=["data"],
-    response_description="A JSON array of all current batting types, sorted by Type ID.",
 )
 def get_all_batting_types() -> list[BattingTypeDefinition]:
     battingTypes = BattingType.select().order_by(BattingType.type).dicts()
@@ -33,8 +24,6 @@ def get_all_batting_types() -> list[BattingTypeDefinition]:
 @dataRouter.get(
     "/battingTypes/search",
     tags=["data"],
-    description="Search for one or more batting types using a comma-separated list of IDs.",
-    response_description="A list of data for all matching batting types; if no search terms provided, all batting types will be returned.",
 )
 def search_batting_types(ids: str | None = None) -> list[BattingTypeDefinition]:
     if (ids) != None:
@@ -58,8 +47,6 @@ def search_batting_types(ids: str | None = None) -> list[BattingTypeDefinition]:
 @dataRouter.get(
     "/battingTypes/{id}",
     tags=["data"],
-    description="Data on a specific batting type.",
-    response_description="Data on the specific batting type",
 )
 def get_batting_type(id: str) -> BattingTypeDefinition:
     battingType = BattingType.get_or_none(BattingType.type == id.upper())
@@ -68,16 +55,9 @@ def get_batting_type(id: str) -> BattingTypeDefinition:
     return battingType
 
 
-####################
-# /data/pitchingTypes
-####################
-
-
 @dataRouter.get(
-    "/pitchingTypes/all",
+    "/pitchingTypes",
     tags=["data"],
-    description="Data on all current pitching types.",
-    response_description="A list of data on all current pitching types, sorted by type ID.",
 )
 def get_all_pitching_types() -> list[PitchingTypeDefinition]:
     pitchingTypes = PitchingType.select().order_by(PitchingType.type).dicts()
@@ -89,8 +69,6 @@ def get_all_pitching_types() -> list[PitchingTypeDefinition]:
 @dataRouter.get(
     "/pitchingTypes/search",
     tags=["data"],
-    description="Search for one or more pitching types using a comma-separated list of IDs.",
-    response_description="A list of data for all matching pitching types; if no search terms provided, all batting types will be returned.",
 )
 def search_pitching_types(
     ids: str | None = None,
@@ -116,8 +94,6 @@ def search_pitching_types(
 @dataRouter.get(
     "/pitchingTypes/{id}",
     tags=["data"],
-    description="Data on a specific pitching type.",
-    response_description="Data on the specific pitching type",
 )
 def get_pitching_type(id: str) -> PitchingTypeDefinition:
     pitchingType = PitchingType.get_or_none(PitchingType.type**id)
@@ -126,16 +102,9 @@ def get_pitching_type(id: str) -> PitchingTypeDefinition:
     return pitchingType
 
 
-####################
-# /data/handBonuses
-####################
-
-
 @dataRouter.get(
     "/handBonuses/all",
     tags=["data"],
-    description="Data on all current pitching hand bonuses.",
-    response_description="A list of data on all current pitching hand bonuses, sorted by type ID.",
 )
 def get_all_hand_bonuses() -> list[HandBonusDefinition]:
     handBonuses = HandBonus.select().order_by(HandBonus.type).dicts()
@@ -147,8 +116,6 @@ def get_all_hand_bonuses() -> list[HandBonusDefinition]:
 @dataRouter.get(
     "/handBonuses/search",
     tags=["data"],
-    description="Search for one or more pitching hand bonuses using a comma-separated list of IDs.",
-    response_description="A list of data for all matching pitching hand bonuses; if no search terms provided, all hand bonuses will be returned.",
 )
 def search_hand_bonuses(
     ids: str | None = None,
@@ -178,8 +145,6 @@ def search_hand_bonuses(
 @dataRouter.get(
     "/handBonuses/{id}",
     tags=["data"],
-    description="Data on a specific pitching hand bonus.",
-    response_description="Data on the specific pitching hand bonus",
 )
 def get_hand_bonus(id: str) -> HandBonusDefinition:
     handBonus = HandBonus.get_or_none(HandBonus.type**id)
@@ -188,16 +153,9 @@ def get_hand_bonus(id: str) -> HandBonusDefinition:
     return handBonus
 
 
-####################
-# /data/currentSeason
-####################
-
-
 @dataRouter.get(
     "/currentSeason",
     tags=["data"],
-    description="Returns the current season and session numbers for MLR and MiLR.",
-    response_description="Season and session numbers for the MLR and MiLR leagues.",
 )
 def get_current_season() -> list[SeasonDefinition]:
     seasons = Season.select().order_by(Season.league).dicts()
