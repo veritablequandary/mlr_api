@@ -28,9 +28,9 @@ def get_all_batting_types() -> list[BattingTypeDefinition]:
 )
 def search_batting_types(
     ids: Annotated[
-        str,
+        str | None,
         Path(
-            description="A single type ID or comma-separated list of type IDs to return, e.g. HK or BC,SF,MH"
+            description="A single type ID or comma-separated list of type IDs to return, e.g. HK or BC,SF,MH",
         ),
     ]
 ) -> list[BattingTypeDefinition]:
@@ -53,17 +53,6 @@ def search_batting_types(
 
 
 @dataRouter.get(
-    "/battingTypes/{id}",
-    tags=["data"],
-)
-def get_batting_type(id: str) -> BattingTypeDefinition:
-    battingType = BattingType.get_or_none(BattingType.type == id.upper())
-    if (battingType) == None:
-        raise HTTPException(status_code=404, detail="Batting type not found.")
-    return battingType
-
-
-@dataRouter.get(
     "/pitchingTypes",
     tags=["data"],
 )
@@ -75,11 +64,16 @@ def get_all_pitching_types() -> list[PitchingTypeDefinition]:
 
 
 @dataRouter.get(
-    "/pitchingTypes/search",
+    "/pitchingTypes/{ids}",
     tags=["data"],
 )
 def search_pitching_types(
-    ids: str | None = None,
+    ids: Annotated[
+        str | None,
+        Path(
+            description="A single type ID or comma-separated list of type IDs to return, e.g. WC or BB,WC,NT",
+        ),
+    ]
 ) -> list[PitchingTypeDefinition]:
     if (ids) != None:
         separated = list(map(str.upper, ids.split(",")))
@@ -97,17 +91,6 @@ def search_pitching_types(
         if len(pitchingTypes) == 0:
             raise HTTPException(status_code=404, detail="No pitching types found.")
         return [*pitchingTypes]
-
-
-@dataRouter.get(
-    "/pitchingTypes/{id}",
-    tags=["data"],
-)
-def get_pitching_type(id: str) -> PitchingTypeDefinition:
-    pitchingType = PitchingType.get_or_none(PitchingType.type**id)
-    if (pitchingType) == None:
-        raise HTTPException(status_code=404, detail="Pitching type not found.")
-    return pitchingType
 
 
 @dataRouter.get(
