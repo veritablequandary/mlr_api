@@ -14,6 +14,10 @@ dataRouter = APIRouter(
 @dataRouter.get(
     "/battingTypes",
     tags=["data"],
+    summary="All Batting Types",
+    description="Get data objects for all batting types currently in the database.",
+    status_code=200,
+    response_description="A list (JSON array) of data objects, one for each batting type currently in the database, sorted by type ID.",
 )
 def get_all_batting_types() -> list[BattingTypeDefinition]:
     battingTypes = BattingType.select().order_by(BattingType.type).dicts()
@@ -25,6 +29,8 @@ def get_all_batting_types() -> list[BattingTypeDefinition]:
 @dataRouter.get(
     "/battingTypes/{ids}",
     tags=["data"],
+    summary="All Batting Types",
+    description="Fetches data objects for all batting types currently in the database.",
 )
 def search_batting_types(
     ids: Annotated[
