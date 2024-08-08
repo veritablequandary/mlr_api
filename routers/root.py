@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from models.hello import HelloResponse
+from typings.hello_response import HelloResponse
 
 
 root_router = APIRouter(tags=["/"])
@@ -11,7 +11,6 @@ root_router = APIRouter(tags=["/"])
 )
 def hello():
     """
-    Use this endpoint to check whether the API is active.
-    A JSON response with status code 200 indicates that the API is ready to accept queries.
+    A successful response indicates that the API is active and ready to receive requests.
     """
     return {"message": "Hello there!"}
