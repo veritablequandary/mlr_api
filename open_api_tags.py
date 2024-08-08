@@ -1,6 +1,6 @@
 tags_metadata = [
     {
-        "name": "root",
+        "name": "/",
         "description": "API status and information",
     },
 ]

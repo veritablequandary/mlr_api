@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 
-root_router = APIRouter(prefix="/", tags=["root"])
+root_router = APIRouter(tags=["/"])
 
 
 # Since health check must be successful before the API becomes active, no failure responses need to be handled
