@@ -8,3 +8,9 @@ app = FastAPI(
     docs_url=None,
     redoc_url="/",
 )
+
+
+# Predominantly for Railway health checks, but users can also test API state by querying this
+@app.get("/hello")
+def hello():
+    return {"message": "Hello there!"}
