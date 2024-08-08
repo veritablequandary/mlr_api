@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from open_api_tags import tags_metadata
+from routers.root import root_router
 
 app = FastAPI(
     title="MLR-Reference API",
@@ -7,10 +9,8 @@ app = FastAPI(
     version="0.1.0",
     docs_url=None,
     redoc_url="/",
+    openapi_tags=tags_metadata,
 )
 
 
-# Predominantly for Railway health checks, but users can also test API state by querying this
-@app.get("/hello")
-def hello():
-    return {"message": "Hello there!"}
+app.include_router(root_router)
