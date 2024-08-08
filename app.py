@@ -8,7 +8,7 @@ app = FastAPI(
     description="For issues, please contact Sterling Turlington on the MLR Main Discord (@veritablequandary).",
     version="0.1.0",
     docs_url="/",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
     openapi_tags=tags_metadata,
 )
 
